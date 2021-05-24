@@ -18,13 +18,23 @@ $router->get('/', function () use ($router) {
 });
 
 // Product
-$router->get('products/{id}',['as'=> 'products', 'uses'=> 'ProductController@get']);
-$router->patch('products/{id}',['as'=> 'products', 'uses'=> 'ProductController@update']);
-$router->delete('products/{id}',['as'=> 'products', 'uses'=> 'ProductController@delete']);
-$router->get('products',['as'=> 'products', 'uses'=>'ProductController@getAll']);
+$router->get('products/{id}',['as'=> 'products.get', 'uses'=> 'ProductController@get']);
+$router->patch('products/{id}',['as'=> 'products.patch', 'uses'=> 'ProductController@update']);
+$router->delete('products/{id}',['as'=> 'products.delete', 'uses'=> 'ProductController@delete']);
+$router->get('products',['as'=> 'products.getAll', 'uses'=>'ProductController@getAll']);
 $router->post('products', ['as' => 'products', 'uses' => 'ProductController@create']);
 
 //  Customer
-// $router->get('customers/{id}', ['as' => 'customers', 'uses' => 'CustomerController@get']);
-// $router->get('customers', ['as' => 'customers', 'uses' => 'CustomerController@getAll']);
-$router->post('customers', ['uses'=>'CustomerController@register']);
+
+$router->post('login',['customer.login', 'uses'=> 'AuthController@login']);
+$router->post('register',['customer.register', 'uses'=> 'AuthController@register']);
+
+$router->group(['middleware'=>'auth'],function() use ($router){
+    $router->get('orders/{id}',['order.get','uses'=>'OrderController@get']);
+    $router->get('orders',['order.getAll','uses'=>'OrderController@getAll']);
+    $router->post('orders', ['orders', 'uses' => 'OrderController@create']);
+    $router->get('customer',['customer.profile','uses'=> 'AuthController@customer']);
+    $router->post('logout',['logout','uses'=> 'AuthController@logout']);
+});
+
+
