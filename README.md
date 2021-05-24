@@ -1,24 +1,272 @@
-# Lumen PHP Framework
+# Simple REST based E-Commerce App
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+## Introduction:
+A simple REST Api based application for E-Commerce with JWT Authentication. The following app uses Lumen as Back end framework powered with MongoDB as database.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+# Technologies:
+Project is created with:
 
-## Official Documentation
+PHP v7.3.21 ; MongoDb v4.4 ; Lumen v8.0
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+# Libraries / Packages:
+chuckrincon/lumen-config-discover: ^1.0
 
-## Contributing
+jenssegers/mongodb: ^3.8
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+tymon/jwt-auth: ^1.0
 
-## Security Vulnerabilities
+# API Docs
+## Show Products
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+_URL_ : **/products/{id}**
 
-## License
+_Method_: **GET**
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+_URL Params_: **id** (In case of getting a single product detail)
+
+_Data params_: **None**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **[{ id : 12 , productName : "Mouse" },{ id : 10 , productName : "Keyboard"}**]
+
+OR
+
+_Code_: 200
+
+_Content_: **{ id : 12 , productName : "Mouse"}**
+
+OR
+
+_Code_: 200
+
+_Content_: **"Resource is Empty."**
+
+## Create Products
+
+_URL_ : **/products/**
+
+_Method_: **POST**
+
+_URL Params_: **None**
+
+_Data params_: { "pname" : "Mouse", "qty" : 20, "price" : 100 }
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **Resource added successfuly**
+
+**_Error Response_**:
+
+_Code_: 404
+
+_Content_: **Resource doesn't exist.**
+
+## Patch Products
+
+_URL_ : **/products/{id}**
+
+_Method_: **POST**
+
+_URL Params_: **id{Required}**
+
+_Data params_: { "pname" : "Mouse", "qty" : 20, "price" : 100 }
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **Resource updated successfuly**
+
+**_Error Response_**:
+
+_Code_: 404
+
+_Content_: **Resource doesn't exist.**
+
+## Delete Products
+
+_URL_ : **/products/{id}**
+
+_Method_: **POST**
+
+_URL Params_: **id{Required}**
+
+_Data params_: **None**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **Resource deleted successfuly**
+
+**_Error Response_**:
+
+_Code_: 404
+
+_Content_: **Resource doesn't exist.**
+
+
+## Register Customer
+
+_URL_ : **/register**
+
+_Method_: **POST**
+
+_URL Params_: **None**
+
+_Data params_: {"name":"John Doe","email":"johnknowsnothing@got.in","password":"randompass","confirm_password":"randompass"}
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **You are registered successfully**
+
+## Login Customer
+
+_URL_ : **/login**
+
+_Method_: **POST**
+
+_URL Params_: **None**
+
+_Data params_: **{"email":"johnknowsnothing@got.in","password":"randompass"}**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **{ 'access_token' : 'Authentication token' , 'token_type' => 'bearer', 'expires_in' : 3600 }**
+
+**_Error Response_**:
+
+_Code_: 401
+
+_Content_: **{ 'error' : 'Unauthorized' }**
+
+## Protected Routes (JWT Authenticated):
+
+## Customer Profile
+
+_URL_ : **/customer**
+
+_Method_: **GET**
+
+_URL Params_: **None**
+
+_Data params_: **None**
+
+_Header Param_ : **Authentication : Bearer AuthenticationTokenObtainedInResponse**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **{ 'name':'John Doe' , "email":"johnknowsnothing@got.in" }**
+
+**_Error Response_**:
+
+_Code_: 401
+
+_Content_: **{ 'error' : 'Unauthorized' }**
+
+## Show Orders
+
+_URL_ : **/orders/{id}**
+
+_Method_: **GET**
+
+_URL Params_: **id** (In case of getting a single product detail)
+
+_Data params_: **None**
+
+_Header Param_ : **Authentication : Bearer AuthenticationTokenObtainedInResponse**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **[{ id : 12 , productName : "Mouse", "qty" : 2 },{ id : 12 , productName : "Keyboard", "qty" : 4}]**
+
+OR
+
+_Code_: 200
+
+_Content_: **{ id : 12 , productName : "Mouse", "qty" : 2}**
+
+**_Error Response_**:
+
+_Code_: 401
+
+_Content_: **{ 'error' : 'Unauthorized' }**
+
+OR
+
+_Code_: 404
+
+_Content_: **Resource doesn't exist**
+
+## Create Orders
+
+_URL_ : **/orders/**
+
+_Method_: **POST**
+
+_URL Params_: **None**
+
+_Data params_: **{ "productId" : "124", "qty" : 2 }**
+
+_Header Param_ : **Authentication : Bearer AuthenticationTokenObtainedInResponse**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **Order Placed Successfully**
+
+**_Error Response_**:
+
+_Code_: 401
+
+_Content_: **{ 'error' : 'Unauthorized' }**
+
+
+## Logout
+
+_URL_ : **/logout/**
+
+_Method_: **POST**
+
+_URL Params_: **None**
+
+_Data params_: **None**
+
+_Header Param_ : **Authentication : Bearer AuthenticationTokenObtainedInResponse**
+
+**_Success Response_**:
+
+_Code_: 200
+
+_Content_: **You are logged out successfully**
+
+**_Error Response_**:
+
+_Code_: 401
+
+_Content_: **{ 'error' : 'Unauthorized' }**
+
+
+
+
+
+
+
+
+
+
+
